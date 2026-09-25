@@ -9,15 +9,13 @@ datasource db {
 model Cliente {
    id_cliente Int @id @default(autoincrement())
    tipo String @db.VarChar(300)
-   preco Decimal @db.Decimal(10,2)
    nome String @db.VarChar(100)
    cpf String @db.VarChar(14)
    telefone String @db.VarChar(20)
    email String @db.VarChar(100)
    endereco String @db.VarChar(150)
-   data_cadastro Datetime @db.Date
 
-   vendas Venda[]
+   vendas Vendas[]
    boleto Boleto[]
    servicos Servico[]
    
@@ -26,10 +24,10 @@ model Cliente {
 model Boleto {
   id_boleto Int @id @default(autoincrement())
   valor Decimal @db.Decimal(10,2)
-  vencimento Datetime @db.Date
+  vencimento DateTime @db.Date
   status String @db.VarChar(30)
 
-  id_clinte Int
+  id_cliente Int
   cliente Cliente @relation(fields:[id_cliente],references:[id_cliente])
 
 }
@@ -46,7 +44,7 @@ model Servico {
    id_servico Int @id @default(autoincrement())
    descricao String @db.VarChar(255)
    tipo_servico String @db.VarChar(100)
-   data_agendamento Datetime @db.Date
+   data_agendamento DateTime @db.Date
    status String @db.VarChar(30)
    valor Decimal @db.Decimal(10,2)
 
@@ -57,7 +55,7 @@ model Servico {
 
 model Vendas {
    id_vendas Int @id @default(autoincrement())
-   data_venda Datetime @db.Date
+   data_venda DateTime @db.Date
    valor_total Decimal @db.Decimal(10,2)
 
    id_cliente Int 
@@ -67,12 +65,12 @@ model Vendas {
 }
 
 model Item_Venda {
-  id_item_venda Int @db @default(autoincrement())
+  id_item_venda Int @id @default(autoincrement())
   quantidade Int 
   valor_unitario Decimal @db.Decimal(10,2)
 
   id_venda Int
-  venda  Venda @relation(fields:[id_venda],references:[id_venda])
+  venda  Vendas @relation(fields:[id_venda],references:[id_vendas])
 
   id_produto Int
   produto Produto @relation(fields:[id_produto],references:[id_produto])
@@ -85,5 +83,5 @@ model Produto {
    preco_venda Decimal @db.Decimal(10,2)
    quantidade_historico Int
    
-   itensvenda ItemVenda[]
+   itensvenda Item_Venda[]
 }

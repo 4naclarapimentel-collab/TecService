@@ -4,13 +4,12 @@ import "./CadastroCliente.css";
 function CadastroCliente() {
   const [form, setForm] = useState({
     tipo: "",
-    preco: "",
     nome: "",
     cpf: "",
     telefone: "",
     email: "",
     endereco: "",
-    data_cadastro: "",
+  
   });
 
   const [mensagem, setMensagem] = useState("");
@@ -49,13 +48,12 @@ function CadastroCliente() {
 
       setForm({
         tipo: "",
-        preco: "",
         nome: "",
         cpf: "",
         telefone: "",
         email: "",
         endereco: "",
-        data_cadastro: "",
+        
       });
     } catch (error) {
       setErro(error.message);
@@ -85,19 +83,7 @@ function CadastroCliente() {
             />
           </label>
 
-          <label>
-            Preço
-            <input
-              type="number"
-              name="preco"
-              value={form.preco}
-              onChange={handleChange}
-              placeholder="Digite o preço"
-              step="0.01"
-              required
-            />
-          </label>
-
+          
           <label>
             Nome
             <input
@@ -158,17 +144,7 @@ function CadastroCliente() {
             />
           </label>
 
-          <label>
-            Data de cadastro
-            <input
-              type="date"
-              name="data_cadastro"
-              value={form.data_cadastro}
-              onChange={handleChange}
-              required
-            />
-          </label>
-
+          
           <button type="submit" disabled={carregando}>
             {carregando ? "Cadastrando..." : "Cadastrar"}
           </button>
