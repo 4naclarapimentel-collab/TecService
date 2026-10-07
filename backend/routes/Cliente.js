@@ -8,7 +8,7 @@ const prisma = require("../prisma/client");
 // GET /Usuarios
 router.get("/", async function (req, res) {
   try {
-    const clientes = await prisma.clientes.findMany(); // SELECT * FROM clientes    
+    const clientes = await prisma.cliente.findMany(); // SELECT * FROM clientes    
     res.status(200).json(clientes);
   } catch (error) {
     console.error("Erro ao listar clientes:", error);
@@ -22,7 +22,7 @@ router.get("/:cpf", async function (req, res) {
   try {
     const { cpf } = req.params;
 
-    const cliente = await prisma.clientes.findUnique({
+    const cliente = await prisma.cliente.findUnique({
       where: { cpf }
     });
 
@@ -49,7 +49,7 @@ router.post("/", async function (req, res) {
       });
     }
 
-    const cliente = await prisma.clientes.create({
+    const cliente = await prisma.cliente.create({
       data: {
         cpf,
         nomeCliente,
@@ -80,7 +80,7 @@ router.put("/:cpf", async function (req, res) {
     const { cpf } = req.params;
     const { nomeCliente, emailCliente, senhaCliente } = req.body;
 
-    const clienteAtualizado = await prisma.clientes.update({
+    const clienteAtualizado = await prisma.cliente.update({
       where: { cpf },
       data: {
         nomeCliente,
@@ -107,7 +107,7 @@ router.delete("/:cpf", async function (req, res) {
   try {
     const { cpf } = req.params;
 
-    await prisma.clientes.delete({
+    await prisma.cliente.delete({
       where: { cpf }
     });
 
