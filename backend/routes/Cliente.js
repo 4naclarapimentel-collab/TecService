@@ -4,8 +4,8 @@ const router = express.Router();
 // Usa o Prisma client centralizado, criado uma única vez para a aplicação.
 const prisma = require("../prisma/client");
 
-// LISTAR TODOS OS USUÁRIOS
-// GET /Usuarios
+// LISTAR TODOS OS CLIENTES
+// GET /Clientes
 router.get("/", async function (req, res) {
   try {
     const clientes = await prisma.cliente.findMany(); // SELECT * FROM clientes    
