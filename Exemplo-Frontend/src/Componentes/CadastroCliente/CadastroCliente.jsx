@@ -144,6 +144,18 @@ function CadastroCliente() {
             />
           </label>
 
+          <label>
+            Senha
+            <input
+              type="text"
+              name="senha"
+              value={form.senha}
+              onChange={handleChange}
+              placeholder="Digite a senha"
+              required
+            />
+          </label>
+
           
           <button type="submit" disabled={carregando}>
             {carregando ? "Cadastrando..." : "Cadastrar"}

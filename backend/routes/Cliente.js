@@ -45,7 +45,7 @@ router.post("/", async function (req, res) {
 
     if (!cpf || !nomeCliente || !emailCliente || !senhaCliente) {
       return res.status(400).json({
-        error: "CPF, nome, e-mail e senha são obrigatórios."
+        error: "acesso negado fofa."
       });
     }
 
