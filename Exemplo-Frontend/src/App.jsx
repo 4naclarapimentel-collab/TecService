@@ -4,6 +4,7 @@ import CadastroCliente from "./Componentes/CadastroCliente/CadastroCliente";
 import CadastroProduto from "./Componentes/CadastroProduto/CadastroProduto";
 
 import "./App.css";
+import CadastroItem_Venda from "./Componentes/CadastroItem_Venda/CadastroItem_Venda";
 
 function App() {
   return (
@@ -19,7 +20,15 @@ function App() {
         path="/CadastroProduto"
         element={<CadastroProduto />}
       />
+
+      {/* Tela de cadastro de venda */}
+      <Route
+        path="/CadastroVenda"
+        element={<CadastroVenda/>}
+      />
     </Routes>
+
+    
   );
 }
 
