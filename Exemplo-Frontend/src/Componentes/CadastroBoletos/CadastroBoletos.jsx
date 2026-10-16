@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import "./CadastroBoletos.css";
 
 export default function CadastroBoletos() {
   const [clientes, setClientes] = useState([]);
-
   const [formulario, setFormulario] = useState({
     valor: "",
     vencimento: "",
@@ -14,7 +14,7 @@ export default function CadastroBoletos() {
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState(false);
 
-  // Buscar os clientes cadastrados
+  // Buscar clientes cadastrados
   useEffect(() => {
     async function buscarClientes() {
       try {
@@ -35,7 +35,7 @@ export default function CadastroBoletos() {
     buscarClientes();
   }, []);
 
-  // Atualizar os campos do formulário
+  // Atualizar os campos
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -57,9 +57,18 @@ export default function CadastroBoletos() {
       return;
     }
 
-    if (Number(formulario.valor) <= 0) {
+    if (
+      !Number.isFinite(Number(formulario.valor)) ||
+      Number(formulario.valor) <= 0
+    ) {
       setErro(true);
-      setMensagem("Informe um valor maior que zero.");
+      setMensagem("Informe um valor válido maior que zero.");
+      return;
+    }
+
+    if (!formulario.vencimento) {
+      setErro(true);
+      setMensagem("Informe a data de vencimento.");
       return;
     }
 
@@ -97,116 +106,104 @@ export default function CadastroBoletos() {
       });
     } catch (error) {
       setErro(true);
-      setMensagem(error.message);
+      setMensagem(error.message || "Erro ao conectar com o servidor.");
     } finally {
       setCarregando(false);
     }
   }
 
   return (
-    <main style={estilos.pagina}>
-      <section style={estilos.cartao}>
-        <h1 style={estilos.titulo}>Cadastro de Boletos</h1>
+    <main className="cadastro-boletos">
+      <section className="boleto-card">
+        <h1 className="boleto-titulo">Cadastro de Boletos</h1>
 
-        <p style={estilos.subtitulo}>
+        <p className="boleto-subtitulo">
           Preencha os dados para registrar um novo boleto.
         </p>
 
         <form onSubmit={handleSubmit}>
-          <label style={estilos.label} htmlFor="valor">
-            Valor (R$)
-          </label>
+          <div className="boleto-campo">
+            <label htmlFor="valor">Valor (R$)</label>
+            <input
+              id="valor"
+              name="valor"
+              type="number"
+              min="0.01"
+              step="0.01"
+              placeholder="Ex.: 150.00"
+              value={formulario.valor}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <input
-            style={estilos.input}
-            id="valor"
-            name="valor"
-            type="number"
-            min="0.01"
-            step="0.01"
-            placeholder="Ex.: 150.00"
-            value={formulario.valor}
-            onChange={handleChange}
-            required
-          />
+          <div className="boleto-campo">
+            <label htmlFor="vencimento">Data de vencimento</label>
+            <input
+              id="vencimento"
+              name="vencimento"
+              type="date"
+              value={formulario.vencimento}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <label style={estilos.label} htmlFor="vencimento">
-            Data de vencimento
-          </label>
+          <div className="boleto-campo">
+            <label htmlFor="status">Status do boleto</label>
+            <select
+              id="status"
+              name="status"
+              value={formulario.status}
+              onChange={handleChange}
+              required
+            >
+              <option value="Pendente">Pendente</option>
+              <option value="Pago">Pago</option>
+              <option value="Vencido">Vencido</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
 
-          <input
-            style={estilos.input}
-            id="vencimento"
-            name="vencimento"
-            type="date"
-            value={formulario.vencimento}
-            onChange={handleChange}
-            required
-          />
+          <div className="boleto-campo">
+            <label htmlFor="id_cliente">Cliente</label>
+            <select
+              id="id_cliente"
+              name="id_cliente"
+              value={formulario.id_cliente}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Selecione um cliente</option>
 
-          <label style={estilos.label} htmlFor="status">
-            Status do boleto
-          </label>
-
-          <select
-            style={estilos.input}
-            id="status"
-            name="status"
-            value={formulario.status}
-            onChange={handleChange}
-            required
-          >
-            <option value="Pendente">Pendente</option>
-            <option value="Pago">Pago</option>
-            <option value="Vencido">Vencido</option>
-            <option value="Cancelado">Cancelado</option>
-          </select>
-
-          <label style={estilos.label} htmlFor="id_cliente">
-            Cliente
-          </label>
-
-          <select
-            style={estilos.input}
-            id="id_cliente"
-            name="id_cliente"
-            value={formulario.id_cliente}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecione um cliente</option>
-
-            {clientes.map((cliente) => (
-              <option
-                key={cliente.id_cliente}
-                value={cliente.id_cliente}
-              >
-                {cliente.nomeCliente
-                  ? `${cliente.nomeCliente} — ID ${cliente.id_cliente}`
-                  : `Cliente ${cliente.id_cliente}`}
-              </option>
-            ))}
-          </select>
+              {clientes.map((cliente) => (
+                <option
+                  key={cliente.id_cliente}
+                  value={cliente.id_cliente}
+                >
+                  {cliente.nomeCliente
+                    ? `${cliente.nomeCliente} - ID ${cliente.id_cliente}`
+                    : `Cliente ${cliente.id_cliente}`}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {mensagem && (
             <p
+              className={`boleto-mensagem ${
+                erro ? "mensagem-erro" : "mensagem-sucesso"
+              }`}
               role="alert"
-              style={{
-                color: erro ? "#b91c1c" : "#15803d",
-                marginTop: 16,
-              }}
             >
               {mensagem}
             </p>
           )}
 
           <button
+            className="boleto-botao"
             type="submit"
             disabled={carregando}
-            style={{
-              ...estilos.botao,
-              opacity: carregando ? 0.6 : 1,
-            }}
           >
             {carregando ? "Cadastrando..." : "Cadastrar Boleto"}
           </button>
@@ -215,61 +212,3 @@ export default function CadastroBoletos() {
     </main>
   );
 }
-
-const estilos = {
-  pagina: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "24px",
-    backgroundColor: "#f3f4f6",
-    fontFamily: "Arial, sans-serif",
-  },
-  cartao: {
-    width: "100%",
-    maxWidth: "480px",
-    padding: "28px",
-    backgroundColor: "#ffffff",
-    borderRadius: "12px",
-    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-  },
-  titulo: {
-    marginTop: 0,
-    marginBottom: "8px",
-    color: "#1f2937",
-    fontSize: "26px",
-  },
-  subtitulo: {
-    color: "#6b7280",
-    marginBottom: "24px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "8px",
-    marginTop: "16px",
-    fontWeight: "bold",
-    color: "#374151",
-  },
-  input: {
-    width: "100%",
-    boxSizing: "border-box",
-    padding: "12px",
-    border: "1px solid #d1d5db",
-    borderRadius: "6px",
-    fontSize: "16px",
-    backgroundColor: "#ffffff",
-  },
-  botao: {
-    width: "100%",
-    marginTop: "24px",
-    padding: "14px",
-    border: "none",
-    borderRadius: "6px",
-    backgroundColor: "#2563eb",
-    color: "#ffffff",
-    fontSize: "16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-};

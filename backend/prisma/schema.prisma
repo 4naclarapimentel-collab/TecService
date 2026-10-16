@@ -37,6 +37,7 @@ model Administrador {
    nome String @db.VarChar(100)
    email String @db.VarChar(100)
    senha String @db.VarChar(255)
+   telefone String @db.VarChar(20)
    perfil String @db.VarChar(50)
    cpf String @db.VarChar(14)
 }
