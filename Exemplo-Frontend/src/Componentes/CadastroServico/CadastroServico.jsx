@@ -93,7 +93,7 @@ function CadastroServico() {
               name="tipo_servico"
               value={form.tipo_servico}
               onChange={handleChange}
-              placeholder="Ex.: Manutenção preventiva"
+              placeholder=" Manutenção preventiva"
               maxLength={100}
               required
             />

@@ -12,19 +12,19 @@
   max-width: 520px;
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 20px 45px rgba(70, 42, 110, 0.12);
+  box-shadow: 0 20px 45px rgba(118, 66, 190, 0.12);
   padding: 32px 28px;
 }
 
 .cadastro-card h1 {
   margin: 0 0 8px;
-  color: #3b2354;
+  color: #4c1686;
   font-size: 2rem;
 }
 
 .cadastro-card p {
   margin: 0 0 24px;
-  color: #6a5a7d;
+  color: #a77429;
 }
 
 .cadastro-form {
