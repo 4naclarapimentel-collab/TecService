@@ -23,20 +23,4 @@ function App() {
   );
 }
 
-function App() {
-  return (
-    <Routes>
-      <Route path="/CadastroBoletos" element={<CadastroBoletos />} />
-    </Routes>
-  );
-}
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/CadastroServico" element={<CadastroServico />} />
-    </Routes>
-  );
-}
-
 export default App;
