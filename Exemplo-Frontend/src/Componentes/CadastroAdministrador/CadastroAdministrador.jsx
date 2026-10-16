@@ -6,6 +6,7 @@ function CadastroAdministrador() {
     perfil: "",
     nome: "",
     cpf: "",
+    telefone: "",
     email: "",
     senha: "",
   
@@ -27,7 +28,7 @@ function CadastroAdministrador() {
     setErro("");
 
     try {
-      const response = await fetch("http://localhost:3000/Cliente", {
+      const response = await fetch("http://localhost:3000/Administrador", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +52,7 @@ function CadastroAdministrador() {
         cpf: "",
         telefone: "",
         email: "",
-        endereco: "",
+        senha: "",
         
       });
     } catch (error) {
@@ -64,14 +65,24 @@ function CadastroAdministrador() {
   return (
     <div className="cadastro-page">
       <div className="cadastro-card">
-        <h1>Cadastrar cliente</h1>
+        <h1>Cadastrar administrador</h1>
         <p>
           formulario para cadastro de administrador.
         </p>
 
         <form onSubmit={handleSubmit} className="cadastro-form">
           
-
+          <label>
+            Perfil
+            <input
+              type="text"
+              name="perfil"
+              value={form.perfil}
+              onChange={handleChange}
+              placeholder="Digite o perfil"
+              required
+            />
+          </label>
           
           <label>
             Nome
@@ -111,18 +122,32 @@ function CadastroAdministrador() {
             />
           </label>
 
+
           <label>
-           Descricao
+            Senha
             <input
               type="text"
-              name="endereco"
-              value={form.perfil}
+              name="senha"
+              value={form.senha}
               onChange={handleChange}
-              placeholder="descreva sua funcao"
+              placeholder="Digite a senha"
               required
             />
           </label>
 
+          <label>
+            Telefone
+            <input
+              type="text"
+              name="telefone"
+              value={form.telefone}
+              onChange={handleChange}
+              placeholder="Digite o telefone"
+              required
+            />
+          </label>
+
+         
           
           <button type="submit" disabled={carregando}>
             {carregando ? "Cadastrando..." : "Cadastrar"}
