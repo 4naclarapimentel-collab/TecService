@@ -1,10 +1,15 @@
+
 import { Route, Routes } from "react-router-dom";
 
 import CadastroCliente from "./Componentes/CadastroCliente/CadastroCliente";
 import CadastroProduto from "./Componentes/CadastroProduto/CadastroProduto";
+import CadastroVendas from "./Componentes/CadastroVendas/CadastroVendas";
+import CadastroItem_Venda from "./Componentes/CadastroItem_Venda/CadastroItem_Venda";
+import CadastroServico from "./Componentes/CadastroServico/CadastroServico";
+import CadastroAdministrador from "./Componentes/CadastroAdministrador/CadastroAdministrador";
+import CadastroBoletos from "./Componentes/CadastroBoletos/CadastroBoletos";
 
 import "./App.css";
-import CadastroItem_Venda from "./Componentes/CadastroItem_Venda/CadastroItem_Venda";
 
 function App() {
   return (
@@ -21,17 +26,37 @@ function App() {
         element={<CadastroProduto />}
       />
 
-      {/* Tela de cadastro de venda */}
+      {/* Tela de cadastro de vendas */}
       <Route
-        path="/CadastroVenda"
-        element={<CadastroVenda/>}
+        path="/CadastroVendas"
+        element={<CadastroVendas />}
+      />
+
+      {/* Tela de cadastro de itens de venda */}
+      <Route
+        path="/CadastroItem_Venda"
+        element={<CadastroItem_Venda />}
+      />
+
+      {/* Tela de cadastro de serviços */}
+      <Route
+        path="/CadastroServico"
+        element={<CadastroServico />}
+      />
+
+      {/* Tela de cadastro de administradores */}
+      <Route
+        path="/CadastroAdministrador"
+        element={<CadastroAdministrador />}
+      />
+
+      {/* Tela de cadastro de boletos */}
+      <Route
+        path="/CadastroBoletos"
+        element={<CadastroBoletos />}
       />
     </Routes>
-
-    
   );
 }
-
-
 
 export default App;

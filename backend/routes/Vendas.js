@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // Prisma Client centralizado
-const prisma = require("../prisma/Vendas");
-
+const prisma = require('../prisma/client');
 // LISTAR TODAS AS VENDAS
 // GET /Vendas
 router.get("/", async function (req, res) {

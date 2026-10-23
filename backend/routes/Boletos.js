@@ -1,11 +1,10 @@
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const express = require('express');
+const router = express.Router();
 
 // Cadastrar um boleto
-async function criarBoleto(dados) {
+async function criarBoletos(dados) {
   try {
-    const boleto = await prisma.boleto.create({
+    const boleto = await prisma.boletos.create({
       data: {
         valor: dados.valor,
         vencimento: new Date(dados.vencimento),
@@ -17,7 +16,7 @@ async function criarBoleto(dados) {
       }
     });
 
-    return boleto;
+    return boletos;
   } catch (error) {
     console.error('Erro ao cadastrar boleto:', error);
     throw error;
@@ -27,7 +26,7 @@ async function criarBoleto(dados) {
 // Listar todos os boletos
 async function listarBoletos() {
   try {
-    return await prisma.boleto.findMany({
+    return await prisma.boletos.findMany({
       include: {
         cliente: true
       },
@@ -42,10 +41,10 @@ async function listarBoletos() {
 }
 
 // Buscar um boleto pelo ID
-async function buscarBoleto(id_boleto) {
-  return await prisma.boleto.findUnique({
+async function buscarBoletos(id_boletos) {
+  return await prisma.boletos.findUnique({
     where: {
-      id_boleto: Number(id_boleto)
+      id_boleto: Number(id_boletos)
     },
     include: {
       cliente: true
@@ -54,8 +53,8 @@ async function buscarBoleto(id_boleto) {
 }
 
 // Atualizar um boleto
-async function atualizarBoleto(id_boleto, dados) {
-  return await prisma.boleto.update({
+async function atualizarBoletos(id_boletos, dados) {
+  return await prisma.boletos.update({
     where: {
       id_boleto: Number(id_boleto)
     },
@@ -80,18 +79,20 @@ async function atualizarBoleto(id_boleto, dados) {
 }
 
 // Excluir um boleto
-async function excluirBoleto(id_boleto) {
-  return await prisma.boleto.delete({
+async function excluirBoletos(id_boleto) {
+  return await prisma.boletos.delete({
     where: {
-      id_boleto: Number(id_boleto)
+      id_boleto: Number(id_boletos)
     }
   });
 }
 
 module.exports = {
-  criarBoleto,
+  criarBoletos,
   listarBoletos,
-  buscarBoleto,
-  atualizarBoleto,
-  excluirBoleto
+  buscarBoletos,
+  atualizarBoletos,
+  excluirBoletos
 };
+
+module.exports = router;

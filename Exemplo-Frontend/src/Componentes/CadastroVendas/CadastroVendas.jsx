@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./CadastroVenda.css";
+import "./CadastroVendas.css";
 
 function CadastroVenda() {
   const [form, setForm] = useState({
@@ -122,4 +122,4 @@ function CadastroVenda() {
   );
 }
 
-export default CadastroVenda;
+export default CadastroVendas;
