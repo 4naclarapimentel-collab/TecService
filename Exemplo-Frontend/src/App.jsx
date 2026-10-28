@@ -8,12 +8,19 @@ import CadastroItem_Venda from "./Componentes/CadastroItem_Venda/CadastroItem_Ve
 import CadastroServico from "./Componentes/CadastroServico/CadastroServico";
 import CadastroAdministrador from "./Componentes/CadastroAdministrador/CadastroAdministrador";
 import CadastroBoletos from "./Componentes/CadastroBoletos/CadastroBoletos";
+import { Home } from './Componentes/home/home.jsx';
 
 import "./App.css";
 
 function App() {
   return (
     <Routes>
+      {/* Tela de Início */}
+      <Route
+          path="/Home"
+          element={<Home />}
+        />
+
       {/* Tela de cadastro de clientes */}
       <Route
         path="/CadastroCliente"
@@ -55,6 +62,7 @@ function App() {
         path="/CadastroBoletos"
         element={<CadastroBoletos />}
       />
+      
     </Routes>
   );
 }

@@ -1,0 +1,117 @@
+/* Importação de fonte moderna e elegante */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-farm: #fdfbf7;           /* Fundo creme/areia bem clarinho */
+  --card-bg: #ffffff;           /* Cartões brancos limpos */
+  --card-border: #f0ebe1;       /* Linhas e bordas suaves */
+  --text-main: #2c2a29;         /* Castanho escuro quase preto para textos */
+  --text-muted: #7c7671;        /* Tom acinzentado/terroso para subtítulos */
+  --accent-farm: #d97757;       /* Tom terracota suave típico da marca */
+  --card-hover-shadow: 0 12px 30px rgba(44, 42, 41, 0.06);
+}
+
+.home-container {
+  min-height: 100vh;
+  background-color: var(--bg-farm);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-main);
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Cabeçalho minimalista e elegante */
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 700px;
+}
+
+.header h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-main);
+  margin-bottom: 0.75rem;
+  text-transform: lowercase; /* Dá aquele ar moderno e despojado */
+}
+
+.header h1::after {
+  content: '.';
+  color: var(--accent-farm);
+}
+
+.header p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Grade de Atalhos */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Cartões (Cards) com estilo Clean / Boutique */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px; /* Bordas levemente arredondadas, sofisticadas */
+  padding: 2.5rem 2rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinhado à esquerda dá um toque de editorial de moda */
+  text-align: left;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Efeito Hover subtil e refinado */
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #dcd6cd;
+  box-shadow: var(--card-hover-shadow);
+}
+
+/* Ícone */
+.card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  background-color: #1f55b8;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.card:hover .card-icon {
+  background-color: #154f91;
+}
+
+/* Título do Card */
+.card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+/* Descrição do Card */
+.card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
