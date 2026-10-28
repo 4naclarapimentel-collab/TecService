@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CadastroVendas.css";
 
-function CadastroVenda() {
+function CadastroVendas() {
   const [form, setForm] = useState({
     data_venda: "",
     valor_total: "",
