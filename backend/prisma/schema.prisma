@@ -1,89 +1,181 @@
 generator client {
-   provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-   provider = "mysql"
+  provider = "mysql"
 }
+
+// ---------- ENUMS ----------
+
+enum Perfil {
+  PROPRIETARIO
+  FUNCIONARIO
+  CLIENTE
+}
+
+enum TipoCliente {
+  PESSOA_FISICA
+  PESSOA_JURIDICA
+}
+
+enum StatusServico {
+  AGENDADO
+  EM_ANDAMENTO
+  CONCLUIDO
+  CANCELADO
+}
+
+enum StatusBoleto {
+  PENDENTE
+  PAGO
+  VENCIDO
+  CANCELADO
+}
+
+enum TipoMovimentacao {
+  ENTRADA
+  SAIDA
+}
+
+// ---------- LOGIN E ACESSO ----------
+
+// Substitui o antigo "Administrador". O campo "perfil" define o nível de acesso.
+model Usuario {
+  id_usuario Int     @id @default(autoincrement())
+  nome       String  @db.VarChar(100)
+  email      String  @unique @db.VarChar(100)
+  senha      String  @db.VarChar(255) // salvar sempre o hash (bcrypt)
+  telefone   String  @db.VarChar(20)
+  cpf        String  @unique @db.VarChar(14)
+  perfil     Perfil
+  ativo      Boolean @default(true)
+
+  cliente             Cliente?
+  servicos_executados Servico[]
+  movimentacoes       MovimentacaoEstoque[]
+}
+
+// ---------- CLIENTES ----------
 
 model Cliente {
-   id_cliente Int @id @default(autoincrement())
-   tipo String @db.VarChar(300)
-   nome String @db.VarChar(100)
-   cpf String @db.VarChar(14)
-   telefone String @db.VarChar(20)
-   email String @db.VarChar(100)
-   endereco String @db.VarChar(150)
+  id_cliente Int         @id @default(autoincrement())
+  tipo       TipoCliente @default(PESSOA_FISICA)
+  nome       String      @db.VarChar(100)
+  documento  String      @unique @db.VarChar(18) // CPF ou CNPJ
+  telefone   String      @db.VarChar(20)
+  email      String      @unique @db.VarChar(100)
+  endereco   String      @db.VarChar(150)
 
-   vendas Vendas[]
-   boleto Boleto[]
-   servicos Servico[]
-   
+  // login do cliente (opcional: só existe se o cliente tiver acesso ao sistema)
+  id_usuario Int?     @unique
+  usuario    Usuario? @relation(fields: [id_usuario], references: [id_usuario])
+
+  vendas   Venda[]
+  boletos  Boleto[]
+  servicos Servico[]
 }
 
-model Boleto {
-  id_boleto Int @id @default(autoincrement())
-  valor Decimal @db.Decimal(10,2)
-  vencimento DateTime @db.Date
-  status String @db.VarChar(30)
-
-  id_cliente Int
-  cliente Cliente @relation(fields:[id_cliente],references:[id_cliente])
-
-}
-
-model Administrador {
-   id_administrador Int @id @default(autoincrement())
-   nome String @db.VarChar(100)
-   email String @db.VarChar(100)
-   senha String @db.VarChar(255)
-   telefone String @db.VarChar(20)
-   perfil String @db.VarChar(50)
-   cpf String @db.VarChar(14)
-}
+// ---------- SERVIÇOS ----------
 
 model Servico {
-   id_servico Int @id @default(autoincrement())
-   descricao String @db.VarChar(255)
-   tipo_servico String @db.VarChar(100)
-   data_agendamento DateTime @db.Date
-   status String @db.VarChar(30)
-   valor Decimal @db.Decimal(10,2)
+  id_servico       Int           @id @default(autoincrement())
+  descricao        String        @db.VarChar(255)
+  tipo_servico     String        @db.VarChar(100)
+  data_agendamento DateTime // data e horário
+  status           StatusServico @default(AGENDADO)
+  valor            Decimal       @db.Decimal(10, 2)
 
-   id_cliente Int
-   cliente Cliente @relation(fields:[id_cliente],references:[id_cliente])
+  id_cliente Int
+  cliente    Cliente @relation(fields: [id_cliente], references: [id_cliente])
 
+  // funcionário responsável pelo serviço
+  id_funcionario Int?
+  funcionario    Usuario? @relation(fields: [id_funcionario], references: [id_usuario])
+
+  boletos Boleto[]
 }
 
-model Vendas {
-   id_vendas Int @id @default(autoincrement())
-   data_venda DateTime @db.Date
-   valor_total Decimal @db.Decimal(10,2)
+// ---------- VENDAS ----------
 
-   id_cliente Int 
-   cliente Cliente @relation(fields:[id_cliente], references:[id_cliente])
+model Venda {
+  id_venda    Int      @id @default(autoincrement())
+  data_venda  DateTime @db.Date
+  valor_total Decimal  @db.Decimal(10, 2)
 
-   itens_venda Item_Venda[]
+  id_cliente Int
+  cliente    Cliente @relation(fields: [id_cliente], references: [id_cliente])
+
+  itens   ItemVenda[]
+  boletos Boleto[]
 }
 
-model Item_Venda {
-  id_item_venda Int @id @default(autoincrement())
-  quantidade Int 
-  valor_unitario Decimal @db.Decimal(10,2)
+model ItemVenda {
+  id_item_venda  Int     @id @default(autoincrement())
+  quantidade     Int
+  valor_unitario Decimal @db.Decimal(10, 2)
 
   id_venda Int
-  venda  Vendas @relation(fields:[id_venda],references:[id_vendas])
+  venda    Venda @relation(fields: [id_venda], references: [id_venda])
 
   id_produto Int
-  produto Produto @relation(fields:[id_produto],references:[id_produto])
+  produto    Produto @relation(fields: [id_produto], references: [id_produto])
 }
 
+// ---------- ESTOQUE ----------
+
 model Produto {
-   id_produto Int @id @default(autoincrement())
-   nome String @db.VarChar(100)
-   descricao String @db.VarChar(255)
-   preco_venda Decimal @db.Decimal(10,2)
-   quantidade_historico Int
-   
-   itensvenda Item_Venda[]
+  id_produto         Int     @id @default(autoincrement())
+  nome               String  @db.VarChar(100)
+  descricao          String  @db.VarChar(255)
+  preco_venda        Decimal @db.Decimal(10, 2)
+  quantidade_estoque Int     @default(0) // quantidade atual
+  estoque_minimo     Int     @default(0) // para alerta de reposição
+
+  itens_venda   ItemVenda[]
+  movimentacoes MovimentacaoEstoque[]
+}
+
+// Histórico de entradas e saídas (substitui "quantidade_historico")
+model MovimentacaoEstoque {
+  id_movimentacao Int              @id @default(autoincrement())
+  tipo            TipoMovimentacao
+  quantidade      Int
+  data            DateTime         @default(now())
+  observacao      String?          @db.VarChar(255)
+
+  id_produto Int
+  produto    Produto @relation(fields: [id_produto], references: [id_produto])
+
+  id_usuario Int?
+  usuario    Usuario? @relation(fields: [id_usuario], references: [id_usuario])
+}
+
+// ---------- FINANCEIRO ----------
+
+model Boleto {
+  id_boleto       Int          @id @default(autoincrement())
+  valor           Decimal      @db.Decimal(10, 2)
+  vencimento      DateTime     @db.Date
+  data_pagamento  DateTime?    @db.Date
+  status          StatusBoleto @default(PENDENTE)
+
+  id_cliente Int
+  cliente    Cliente @relation(fields: [id_cliente], references: [id_cliente])
+
+  // o boleto cobra uma venda ou um serviço (ambos opcionais)
+  id_venda Int?
+  venda    Venda? @relation(fields: [id_venda], references: [id_venda])
+
+  id_servico Int?
+  servico    Servico? @relation(fields: [id_servico], references: [id_servico])
+}
+
+// Saídas de dinheiro, para o relatório financeiro fechar (receitas - despesas)
+model Despesa {
+  id_despesa Int      @id @default(autoincrement())
+  descricao  String   @db.VarChar(255)
+  categoria  String   @db.VarChar(100)
+  valor      Decimal  @db.Decimal(10, 2)
+  data       DateTime @db.Date
 }
